@@ -1,0 +1,13 @@
+package com.enefit.storetask;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class StoreTaskApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(StoreTaskApplication.class, args);
+    }
+
+}

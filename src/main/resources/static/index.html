@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Management</title>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+<h1>Store Management (Solar Panel Power Banks)</h1>
+
+<!-- Form to Add Item -->
+<form id="add-item-form">
+    <h2>Add Item</h2>
+    <input type="text" id="item-name" placeholder="Name" required>
+    <input type="number" id="item-price" placeholder="Price" required>
+    <input type="number" id="item-quantity" placeholder="Quantity" required>
+    <button type="submit">Add Item</button>
+</form>
+
+<!-- Form to Update Item -->
+<form id="update-item-form" style="display: none;">
+    <h2>Update Item</h2>
+    <input type="hidden" id="update-item-id">
+    <input type="text" id="update-item-name" placeholder="Name" required>
+    <input type="number" id="update-item-price" placeholder="Price" required>
+    <input type="number" id="update-item-quantity" placeholder="Quantity" required>
+    <button type="submit">Update Item</button>
+</form>
+
+<!-- Fetch and Download Report -->
+<h2>Stock Report</h2>
+<button id="fetch-stock-report" class="btn-download-report">Show Stock Report in Network</button>
+<button id="download-report" class="btn-download-report">Download Stock Report</button>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Sold Quantity</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody id="stock-table-body">
+    <!-- Dynamic content to appear here -->
+    </tbody>
+</table>
+
+<script src="./js/main.js" defer></script>
+</body>
+</html>
