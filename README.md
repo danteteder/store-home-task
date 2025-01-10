@@ -2,7 +2,29 @@
 
 ![Project ovweview](readme.png)
 
-A RESTful store management application designed to simplify inventory tracking, enhance operational visibility, and provide a robust audit trail. Built with modern tools and technologies, the application ensures scalability, maintainability, and reliability.
+A RESTful store management application for a cool company I'd love to join.
+
+## Homework Specifications
+
+### Basic Operations
+- User can add new items to stock. Each item contains name, price and quantity
+- Items can be updated, deleted or sold
+- Reporting of sold items and current stock levels
+
+### Required Technologies
+- Java 17+
+- Spring Boot 3+
+- PostgreSQL database for persistent storage
+- Kafka for messaging (producer and consumer)
+
+### Requirements
+- REST endpoints for all user operations
+- Focus on clean, maintainable and well documented code
+- Create a RESTful API using Spring Boot
+- Use PostgreSQL as the database to store items
+- Implement Kafka producer and consumer for item transactions
+- Provide detailed documentation on how to set up and run the application
+- Write unit tests to ensure high code quality and coverage
 
 ## Features
 
@@ -14,8 +36,8 @@ A RESTful store management application designed to simplify inventory tracking, 
 
 ## Technology Stack
 
-- **Language**: Java 17+
-- **Framework**: Spring Boot 3.x
+- **Language**: Java
+- **Framework**: Spring Boot 
 - **Database**: PostgreSQL
 - **Messaging**: Apache Kafka
 - **Containerization**: Docker & Docker Compose
