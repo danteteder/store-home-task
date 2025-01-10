@@ -70,24 +70,8 @@ Ensure you have the following installed:
 ## API Endpoints Overview
 
 - **Create Item**: `POST /api/v1/items`
-  - Request Body:
-    ```json
-    {
-      "name": "Item Name",
-      "price": 99.99,
-      "quantity": 100
-    }
-    ```
 
 - **Update Item**: `PUT /api/v1/items/{id}`
-  - Request Body:
-    ```json
-    {
-      "name": "Updated Name",
-      "price": 149.99,
-      "quantity": 150
-    }
-    ```
 
 - **Delete Item**: `DELETE /api/v1/items/{id}`
 
