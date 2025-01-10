@@ -142,6 +142,7 @@ Logs are stored in `logs/store-application.log` with detailed patterns for both 
 - Replace string constants with enums for event types (CREATED, UPDATED, SOLD)
 - Implement DTOs to separate API contracts from domain models
 - Add custom exceptions for better error handling (e.g., InsufficientStockException)
+- Standardize where possible and remove redundancies
 
 ### Project Structure
 - Reorganize into a clearer project structure
@@ -168,6 +169,7 @@ Logs are stored in `logs/store-application.log` with detailed patterns for both 
 - Enhance logging with structured format
 - Add request tracing for better debugging
 - Improve audit trail visualization
+- Fix swagger addition for API docs
 
 ### Configuration
 - Move sensitive data to environment variables
