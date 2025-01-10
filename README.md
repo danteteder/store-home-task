@@ -44,7 +44,13 @@ Ensure you have the following installed:
    ```
 
 3. **Run the Application**:
-   Use Gradle to start the application:
+   Use Gradle to build the application:
+
+   ```bash
+   ./gradlew build
+   ```
+
+   Then to run the application:
    ```bash
    ./gradlew bootRun
    ```
