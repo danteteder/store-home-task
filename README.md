@@ -128,6 +128,7 @@ Logs are stored in `logs/store-application.log` with detailed patterns for both 
 - Enhance resource organization (static files, templates)
 
 ### Testing
+- Add further testing, as well as potential edge-cases
 - Add integration tests for Kafka event flow
 - Implement test coverage for database transactions
 - Add performance tests for concurrent operations
