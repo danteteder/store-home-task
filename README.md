@@ -1,5 +1,7 @@
 # Store Management System
 
+![Project ovweview](readme.png)
+
 A RESTful store management application designed to simplify inventory tracking, enhance operational visibility, and provide a robust audit trail. Built with modern tools and technologies, the application ensures scalability, maintainability, and reliability.
 
 ## Features
@@ -111,3 +113,45 @@ The project follows best practices:
 ## Logging
 
 Logs are stored in `logs/store-application.log` with detailed patterns for both file and console outputs.
+
+## Potential Future Improvements
+
+### Code Quality
+- Replace string constants with enums for event types (CREATED, UPDATED, SOLD)
+- Implement DTOs to separate API contracts from domain models
+- Add custom exceptions for better error handling (e.g., InsufficientStockException)
+
+### Project Structure
+- Reorganize into a clearer project structure
+- Create dedicated config package for all configurations
+- Add constants folder for shared values
+- Enhance resource organization (static files, templates)
+
+### Testing
+- Add integration tests for Kafka event flow
+- Implement test coverage for database transactions
+- Add performance tests for concurrent operations
+
+### UI/UX Enhancements
+- Implement responsive design for mobile compatibility
+- Add real-time updates using WebSocket
+- Improve form validations and error feedback
+- Add sorting and filtering to stock report
+- Implement pagination for large datasets
+- Add data visualization for sales trends etc
+- Enhance accessibility features
+
+### Monitoring & Logging
+- Enhance logging with structured format
+- Add request tracing for better debugging
+- Improve audit trail visualization
+
+### Configuration
+- Move sensitive data to environment variables
+- Externalize Kafka and database configurations
+- Add application profiles for different environments
+
+### Documentation
+- Add API response examples
+- Include system architecture diagram
+- Document error scenarios and handling

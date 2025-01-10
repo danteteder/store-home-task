@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entity representing an item in the inventory.
+ */
 @Entity
 @Table(name = "item")
 @Data

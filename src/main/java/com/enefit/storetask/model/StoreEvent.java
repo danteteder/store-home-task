@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Model representing store events for Kafka messaging
+ * Model representing store events for Kafka messaging.
  */
 @Data
 @Builder

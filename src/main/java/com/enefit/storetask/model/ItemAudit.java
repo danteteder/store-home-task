@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 /**
- * Entity for storing item audit trail
+ * Entity for storing item audit trail.
  */
 @Entity
 @Data

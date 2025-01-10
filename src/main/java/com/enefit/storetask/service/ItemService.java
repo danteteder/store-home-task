@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Service for managing store inventory and producing Kafka events
+ * Service for managing store inventory and producing Kafka events.
  */
 @Slf4j
 @Service
@@ -19,14 +19,20 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final StoreEventProducer eventProducer;
+    private final StoreEventProducer storeEventProducer;
 
+    /**
+     * Adds a new item to the inventory.
+     *
+     * @param item the item to add
+     * @return the added item
+     */
     @Transactional
     public Item addItem(Item item) {
         item.setSoldQuantity(0);
         Item savedItem = itemRepository.save(item);
         
-        eventProducer.sendEvent(
+        storeEventProducer.sendEvent(
             "CREATED",
             savedItem.getId(),
             savedItem.getName(),
@@ -40,6 +46,13 @@ public class ItemService {
         return savedItem;
     }
 
+    /**
+     * Updates an existing item in the inventory.
+     *
+     * @param id   the ID of the item to update
+     * @param item the updated item details
+     * @return the updated item
+     */
     @Transactional
     public Item updateItem(Long id, Item item) {
         Item existingItem = itemRepository.findById(id)
@@ -56,7 +69,7 @@ public class ItemService {
 
         Item updatedItem = itemRepository.save(existingItem);
         
-        eventProducer.sendEvent(
+        storeEventProducer.sendEvent(
             "UPDATED",
             updatedItem.getId(),
             updatedItem.getName(),
@@ -69,12 +82,17 @@ public class ItemService {
         return updatedItem;
     }
 
+    /**
+     * Deletes an item from the inventory.
+     *
+     * @param id the ID of the item to delete
+     */
     @Transactional
     public void deleteItem(Long id) {
         Item item = itemRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Item not found"));
         itemRepository.deleteById(id);
-        eventProducer.sendEvent(
+        storeEventProducer.sendEvent(
             "DELETED",
             item.getId(),
             item.getName(),
@@ -85,6 +103,13 @@ public class ItemService {
         );
     }
 
+    /**
+     * Sells a specified quantity of an item.
+     *
+     * @param id           the ID of the item to sell
+     * @param quantitySold the quantity to sell
+     * @return the updated item
+     */
     @Transactional
     public Item sellItem(Long id, int quantitySold) {
         Item item = itemRepository.findById(id)
@@ -99,7 +124,7 @@ public class ItemService {
         item.setSoldQuantity(item.getSoldQuantity() + quantitySold);
         
         Item updatedItem = itemRepository.save(item);
-        eventProducer.sendEvent(
+        storeEventProducer.sendEvent(
             "SOLD",
             updatedItem.getId(),
             updatedItem.getName(),
@@ -113,6 +138,11 @@ public class ItemService {
         return updatedItem;
     }
 
+    /**
+     * Retrieves a report of current stock levels.
+     *
+     * @return a list of items in stock
+     */
     public List<Item> getStockReport() {
         return itemRepository.findAll();
     }

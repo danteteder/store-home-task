@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 /**
- * Service responsible for producing store events to Kafka
+ * Service responsible for producing store events to Kafka.
  */
 @Slf4j
 @Service
@@ -19,6 +19,17 @@ public class StoreEventProducer {
     private final KafkaTemplate<String, StoreEvent> kafkaTemplate;
     private static final String TOPIC = "store-events";
 
+    /**
+     * Sends a store event to Kafka.
+     *
+     * @param action      the action performed
+     * @param itemId      the ID of the item
+     * @param itemName    the name of the item
+     * @param price       the price of the item
+     * @param quantity    the quantity involved
+     * @param stockLevel  the current stock level
+     * @param description a description of the event
+     */
     public void sendEvent(String action, Long itemId, String itemName, double price, 
                          int quantity, int stockLevel, String description) {
         StoreEvent event = StoreEvent.builder()
