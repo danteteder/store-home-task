@@ -34,8 +34,7 @@ Ensure you have the following installed:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repo/store-management-system.git
-   cd store-management-system
+   git clone https://github.com/danteteder/store-home-task/
    ```
 
 2. **Start Infrastructure**:
