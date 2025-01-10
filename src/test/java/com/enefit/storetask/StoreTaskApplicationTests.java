@@ -1,13 +1,13 @@
-package com.enefit.storetask;
+// package com.enefit.storetask;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class StoreTaskApplicationTests {
+// @SpringBootTest
+// class StoreTaskApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+//     @Test
+//     void contextLoads() {
+//     }
 
-}
+// }

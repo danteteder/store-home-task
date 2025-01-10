@@ -1,68 +1,80 @@
-/* Global Styles */
+/* Basic Layout */
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
     padding: 20px;
-    background-color: #f4f4f9;
+    background: #f5f6fa;
 }
 
-h1, h2, table {
-    color: #333;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 /* Forms */
 form {
-    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
 }
 
-input, button {
-    padding: 10px;
-    margin: 5px;
+input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex: 1;
 }
 
-/* Tables */
+button {
+    padding: 8px 16px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.delete {
+    background: #e74c3c;
+}
+
+/* Table */
 table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    margin-top: 20px;
-    border-spacing: 0;
 }
 
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ddd;
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+}
+
+/* Audit Colors */
+tr.created { background: #f0fff0; }
+tr.updated { background: #f0f8ff; }
+tr.sold { background: #fff0f5; }
+tr.deleted { background: #fff5f5; }
+
+/* Messages */
+.error, .empty {
+    padding: 20px;
     text-align: center;
+    color: #666;
 }
 
-table th {
-    background: #ccc;
-}
-
-table tbody tr:nth-child(odd) {
-    background: #f9f9f9;
-}
-
-/* Buttons */
-.btn-update {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.btn-download-report {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+.error {
+    color: #dc3545;
 }

@@ -2,7 +2,9 @@ package com.enefit.storetask.repository;
 
 import com.enefit.storetask.model.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    // Placeholder for custom queries if needed in the future
+    boolean existsByName(String name);
 }

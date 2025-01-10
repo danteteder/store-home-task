@@ -1,54 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Store Management</title>
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h1>Store Management (Solar Panel Power Banks)</h1>
+    <div class="container">
+        <h1>Store Management</h1>
+        
+        <!-- Add Item Form -->
+        <div class="card">
+            <h2>Add Item</h2>
+            <form id="add-item-form">
+                <input type="text" id="item-name" placeholder="Item Name" required>
+                <input type="number" id="item-price" placeholder="Price" step="0.01" min="0.01" required>
+                <input type="number" id="item-quantity" placeholder="Quantity" min="1" required>
+                <button type="submit">Add</button>
+            </form>
+        </div>
 
-<!-- Form to Add Item -->
-<form id="add-item-form">
-    <h2>Add Item</h2>
-    <input type="text" id="item-name" placeholder="Name" required>
-    <input type="number" id="item-price" placeholder="Price" required>
-    <input type="number" id="item-quantity" placeholder="Quantity" required>
-    <button type="submit">Add Item</button>
-</form>
+        <!-- Update Item Form -->
+        <div class="card" id="update-form" style="display: none;">
+            <h2>Update Item</h2>
+            <form id="update-item-form">
+                <input type="hidden" id="update-id">
+                <input type="text" id="update-name" placeholder="Item Name" required>
+                <input type="number" id="update-price" placeholder="Price" step="0.01" min="0.01" required>
+                <input type="number" id="update-quantity" placeholder="Quantity" min="1" required>
+                <div class="button-group">
+                    <button type="submit">Save</button>
+                    <button type="button" onclick="hideUpdateForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
 
-<!-- Form to Update Item -->
-<form id="update-item-form" style="display: none;">
-    <h2>Update Item</h2>
-    <input type="hidden" id="update-item-id">
-    <input type="text" id="update-item-name" placeholder="Name" required>
-    <input type="number" id="update-item-price" placeholder="Price" required>
-    <input type="number" id="update-item-quantity" placeholder="Quantity" required>
-    <button type="submit">Update Item</button>
-</form>
+        <!-- Stock Report -->
+        <div class="card">
+            <h2>Stock Report</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Sold</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="items-table"></tbody>
+            </table>
+        </div>
 
-<!-- Fetch and Download Report -->
-<h2>Stock Report</h2>
-<button id="fetch-stock-report" class="btn-download-report">Show Stock Report in Network</button>
-<button id="download-report" class="btn-download-report">Download Stock Report</button>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Sold Quantity</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody id="stock-table-body">
-    <!-- Dynamic content to appear here -->
-    </tbody>
-</table>
-
-<script src="./js/main.js" defer></script>
+        <!-- Audit Trail -->
+        <div class="card">
+            <h2>Audit Trail</h2>
+            <div id="audit-container"></div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
 </body>
 </html>

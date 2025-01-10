@@ -1,113 +1,164 @@
-const apiUrl = 'http://localhost:8080/api/v1/items';
+const API_URL = 'http://localhost:8080/api/v1/items';
 
-// Add Item
-document.getElementById('add-item-form').onsubmit = async (e) => {
-    e.preventDefault();
-    const name = document.getElementById('item-name').value;
-    const price = parseFloat(document.getElementById('item-price').value);
-    const quantity = parseInt(document.getElementById('item-quantity').value);
+// Initialize and auto-refresh
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    setInterval(loadData, 30000);
+});
 
-    await submitData(apiUrl, 'POST', { name, price, quantity });
-
-    alert('Item added!');
-    document.getElementById('add-item-form').reset();
-    fetchStockReport();
-};
-
-// Update Item
-document.getElementById('update-item-form').onsubmit = async (e) => {
-    e.preventDefault();
-
-    const id = document.getElementById('update-item-id').value;
-    const name = document.getElementById('update-item-name').value;
-    const price = parseFloat(document.getElementById('update-item-price').value);
-    const quantity = parseInt(document.getElementById('update-item-quantity').value);
-
-    await submitData(`${apiUrl}/${id}`, 'PUT', { name, price, quantity });
-
-    alert('Item updated successfully!');
-    document.getElementById('update-item-form').style.display = 'none';
-    fetchStockReport();
-};
-
-// Delete Item
-async function deleteItem(id) {
-    await fetch(`${apiUrl}/${id}`, { method: 'DELETE' });
-    alert('Item deleted!');
-    fetchStockReport();
+async function loadData() {
+    await Promise.all([loadItems(), loadAudit()]);
 }
 
-// Fetch Stock Report
-document.getElementById('fetch-stock-report').onclick = fetchStockReport;
-
-async function fetchStockReport() {
+// Load and display items
+async function loadItems() {
     try {
-        const response = await fetch(`${apiUrl}/report`);
+        const response = await fetch(`${API_URL}/report`);
         const items = await response.json();
-
-        const tableBody = document.getElementById('stock-table-body');
-        tableBody.innerHTML = '';
-
-        items.forEach(item => {
-            const row = `
-                <tr>
-                    <td>${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${item.price}</td>
-                    <td>${item.quantity}</td>
-                    <td>${item.soldQuantity}</td>
-                    <td>
-                        <button class="btn-update" onclick="showUpdateForm(${item.id}, '${item.name}', ${item.price}, ${item.quantity})">Update</button>
-                        <button class="btn-delete" onclick="deleteItem(${item.id})">Delete</button>
-                    </td>
-                </tr>
-            `;
-            tableBody.innerHTML += row;
-        });
+        displayItems(items);
     } catch (error) {
-        console.error('Error fetching stock report:', error);
-        alert('Failed to load stock report. Please try again later.');
+        console.error('Error loading items:', error);
+        document.getElementById('items-table').innerHTML = 
+            '<tr><td colspan="6">Failed to load items</td></tr>';
     }
 }
 
-// Download Stock Report
-document.getElementById('download-report').onclick = async () => {
-    const items = await fetchData(`${apiUrl}/report`);
-    downloadReport('stock_report.json', items);
+function displayItems(items) {
+    const tbody = document.getElementById('items-table');
+    tbody.innerHTML = items.length ? items.map(item => `
+        <tr>
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>$${item.price.toFixed(2)}</td>
+            <td>${item.quantity}</td>
+            <td>${item.soldQuantity}</td>
+            <td>
+                <button onclick="updateItem(${item.id}, '${item.name}', ${item.price}, ${item.quantity})">Update</button>
+                <button onclick="sellItem(${item.id}, ${item.quantity})">Sell</button>
+                <button onclick="deleteItem(${item.id})" class="delete">Delete</button>
+            </td>
+        </tr>
+    `).join('') : '<tr><td colspan="6">No items found</td></tr>';
+}
+
+// Load and display audit
+async function loadAudit() {
+    try {
+        const response = await fetch(`${API_URL}/audit`);
+        const audits = await response.json();
+        displayAudit(audits);
+    } catch (error) {
+        console.error('Error loading audit:', error);
+        document.getElementById('audit-container').innerHTML = 
+            '<div class="error">Failed to load audit trail</div>';
+    }
+}
+
+function displayAudit(audits) {
+    const container = document.getElementById('audit-container');
+    container.innerHTML = audits.length ? `
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Action</th>
+                    <th>Item</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${audits.map(audit => `
+                    <tr class="${audit.action.toLowerCase()}">
+                        <td>${new Date(audit.timestamp).toLocaleString()}</td>
+                        <td>${audit.action}</td>
+                        <td>${audit.itemName}</td>
+                        <td>${audit.description}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    ` : '<div class="empty">No audit records available</div>';
+}
+
+// Form handlers
+document.getElementById('add-item-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: form.querySelector('#item-name').value,
+                price: parseFloat(form.querySelector('#item-price').value),
+                quantity: parseInt(form.querySelector('#item-quantity').value)
+            })
+        });
+
+        if (!response.ok) throw new Error('Failed to add item');
+        form.reset();
+        await loadData();
+    } catch (error) {
+        alert('Failed to add item');
+    }
 };
 
-// Show Update Form
-function showUpdateForm(id, name, price, quantity) {
-    document.getElementById('update-item-id').value = id;
-    document.getElementById('update-item-name').value = name;
-    document.getElementById('update-item-price').value = price;
-    document.getElementById('update-item-quantity').value = quantity;
-    document.getElementById('update-item-form').style.display = 'block';
+// Item actions
+async function updateItem(id, name, price, quantity) {
+    const newName = prompt('Enter new name:', name);
+    const newPrice = prompt('Enter new price:', price);
+    const newQuantity = prompt('Enter new quantity:', quantity);
+    
+    if (!newName || !newPrice || !newQuantity) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: newName,
+                price: parseFloat(newPrice),
+                quantity: parseInt(newQuantity)
+            })
+        });
+
+        if (!response.ok) throw new Error('Failed to update item');
+        await loadData();
+    } catch (error) {
+        alert('Failed to update item');
+    }
 }
 
-// Automatically fetch stock report when the page loads
-document.addEventListener("DOMContentLoaded", () => {
-    fetchStockReport();
-});
-
-// Helper Functions - can be added to separate utils
-async function fetchData(url) {
-    const response = await fetch(url);
-    return response.json();
+async function deleteItem(id) {
+    if (!confirm('Delete this item?')) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Failed to delete item');
+        await loadData();
+    } catch (error) {
+        alert('Failed to delete item');
+    }
 }
 
-async function submitData(url, method, data) {
-    return await fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    });
-}
+async function sellItem(id, currentStock) {
+    const quantity = prompt('Enter quantity to sell:', '1');
+    if (!quantity) return;
 
-function downloadReport(filename, data) {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
-    const anchor = document.createElement('a');
-    anchor.href = dataStr;
-    anchor.download = filename;
-    anchor.click();
+    const amount = parseInt(quantity);
+    if (isNaN(amount) || amount <= 0 || amount > currentStock) {
+        alert(`Invalid quantity. Available: ${currentStock}`);
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/sell/${id}?quantity=${amount}`, {
+            method: 'POST'
+        });
+        if (!response.ok) throw new Error('Failed to sell item');
+        await loadData();
+    } catch (error) {
+        alert('Failed to sell item');
+    }
 }

@@ -6,28 +6,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+/**
+ * Entity for storing item audit trail
+ */
 @Entity
-@Table(name = "item")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Item {
-
+public class ItemAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String name;
-
-    @Column(nullable = false)
+    
+    private Long itemId;
+    private String itemName;
+    private String action;
     private double price;
-
-    @Column(nullable = false)
     private int quantity;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private int soldQuantity = 0;
-}
+    private int stockLevel;
+    private String description;
+    private LocalDateTime timestamp;
+} 
