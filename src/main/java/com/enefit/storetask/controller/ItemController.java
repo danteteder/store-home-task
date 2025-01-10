@@ -6,10 +6,13 @@ import com.enefit.storetask.repository.ItemAuditRepository;
 import com.enefit.storetask.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for managing store items.
@@ -30,8 +33,13 @@ public class ItemController {
      * @return the added item
      */
     @PostMapping
-    public ResponseEntity<Item> addItem(@RequestBody Item item) {
-        return ResponseEntity.ok(itemService.addItem(item));
+    public ResponseEntity<?> addItem(@Validated @RequestBody Item item) {
+        if (item == null) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Item cannot be null"));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(itemService.addItem(item));
     }
 
     /**
@@ -42,7 +50,11 @@ public class ItemController {
      * @return the updated item
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item item) {
+    public ResponseEntity<?> updateItem(@PathVariable Long id, @Validated @RequestBody Item item) {
+        if (item == null) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Item cannot be null"));
+        }
         return ResponseEntity.ok(itemService.updateItem(id, item));
     }
 
@@ -50,12 +62,19 @@ public class ItemController {
      * Deletes an item from the inventory.
      *
      * @param id the ID of the item to delete
-     * @return a response entity with no content
+     * @return a response entity with deletion confirmation
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+    public ResponseEntity<?> deleteItem(@PathVariable Long id) {
+        if (id == null) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "ID cannot be null"));
+        }
         itemService.deleteItem(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Map.of(
+            "message", "Item deleted successfully",
+            "id", id
+        ));
     }
 
     /**
@@ -66,7 +85,15 @@ public class ItemController {
      * @return the updated item
      */
     @PostMapping("/sell/{id}")
-    public ResponseEntity<Item> sellItem(@PathVariable Long id, @RequestParam int quantity) {
+    public ResponseEntity<?> sellItem(@PathVariable Long id, @RequestParam Integer quantity) {
+        if (id == null || quantity == null) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "ID and quantity cannot be null"));
+        }
+        if (quantity <= 0) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Quantity must be greater than 0"));
+        }
         return ResponseEntity.ok(itemService.sellItem(id, quantity));
     }
 
@@ -77,7 +104,8 @@ public class ItemController {
      */
     @GetMapping("/report")
     public ResponseEntity<List<Item>> getStockReport() {
-        return ResponseEntity.ok(itemService.getStockReport());
+        List<Item> items = itemService.getStockReport();
+        return ResponseEntity.ok(items); // Always return OK with the list (empty or not)
     }
 
     /**
@@ -87,6 +115,7 @@ public class ItemController {
      */
     @GetMapping("/audit")
     public ResponseEntity<List<ItemAudit>> getAuditTrail() {
-        return ResponseEntity.ok(auditRepository.findTop50ByOrderByTimestampDesc());
+        List<ItemAudit> audits = auditRepository.findTop50ByOrderByTimestampDesc();
+        return ResponseEntity.ok(audits); // Always return OK with the list (empty or not)
     }
 }
